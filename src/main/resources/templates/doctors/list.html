@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Doctors')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<div class="container">
+  <div class="d-flex justify-content-between mb-3">
+    <h2>Doctors</h2>
+    <a class="btn btn-primary" th:href="@{/doctors/new}">+ Add Doctor</a>
+  </div>
+  <table class="table table-striped">
+    <thead><tr><th>ID</th><th>Name</th><th>Specialization</th><th>Phone</th><th>Email</th><th></th></tr></thead>
+    <tbody>
+      <tr th:each="d : ${doctors}">
+        <td th:text="${d.id}"></td><td th:text="${d.fullName}"></td><td th:text="${d.specialization}"></td>
+        <td th:text="${d.phone}"></td><td th:text="${d.email}"></td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" th:href="@{/doctors/edit/{id}(id=${d.id})}">Edit</a>
+          <form class="d-inline" th:action="@{/doctors/delete/{id}(id=${d.id})}" method="post" onsubmit="return confirm('Delete this doctor?')">
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

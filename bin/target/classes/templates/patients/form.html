@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Patient')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<div class="container" style="max-width:700px">
+  <h2 th:text="${patient.id == null} ? 'Add Patient' : 'Edit Patient'"></h2>
+  <form th:action="@{/patients/save}" th:object="${patient}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <div class="mb-3"><label class="form-label">Full name</label><input class="form-control" th:field="*{fullName}" required></div>
+    <div class="mb-3"><label class="form-label">Date of birth</label><input type="date" class="form-control" th:field="*{dateOfBirth}"></div>
+    <div class="mb-3"><label class="form-label">Gender</label>
+      <select class="form-select" th:field="*{gender}"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+    <div class="mb-3"><label class="form-label">Phone</label><input class="form-control" th:field="*{phone}"></div>
+    <div class="mb-3"><label class="form-label">Address</label><input class="form-control" th:field="*{address}"></div>
+    <div class="mb-3"><label class="form-label">Medical history</label><textarea class="form-control" rows="4" th:field="*{medicalHistory}"></textarea></div>
+    <button class="btn btn-primary">Save</button>
+    <a class="btn btn-secondary" th:href="@{/patients}">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

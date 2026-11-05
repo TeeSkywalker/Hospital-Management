@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Appointments')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<div class="container">
+  <div class="d-flex justify-content-between mb-3">
+    <h2>Appointments</h2>
+    <a class="btn btn-primary" th:href="@{/appointments/new}">+ Book Appointment</a>
+  </div>
+  <table class="table table-striped">
+    <thead><tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date &amp; time</th><th>Reason</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      <tr th:each="a : ${appointments}">
+        <td th:text="${a.id}"></td><td th:text="${a.patient.fullName}"></td><td th:text="${a.doctor.fullName}"></td>
+        <td th:text="${#temporals.format(a.appointmentDate, 'dd MMM yyyy HH:mm')}"></td>
+        <td th:text="${a.reason}"></td><td th:text="${a.status}"></td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" th:href="@{/appointments/edit/{id}(id=${a.id})}">Edit</a>
+          <form class="d-inline" th:action="@{/appointments/delete/{id}(id=${a.id})}" method="post" onsubmit="return confirm('Delete this appointment?')">
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Patients')}"></head>
+<body>
+<nav th:replace="~{fragments :: nav}"></nav>
+<div class="container">
+  <div class="d-flex justify-content-between mb-3">
+    <h2>Patients</h2>
+    <a class="btn btn-primary" th:href="@{/patients/new}">+ Add Patient</a>
+  </div>
+  <form class="input-group mb-3" th:action="@{/patients}" method="get">
+    <input class="form-control" name="q" th:value="${q}" placeholder="Search by name">
+    <button class="btn btn-outline-secondary">Search</button>
+  </form>
+  <table class="table table-striped">
+    <thead><tr><th>ID</th><th>Name</th><th>DOB</th><th>Gender</th><th>Phone</th><th>Address</th><th></th></tr></thead>
+    <tbody>
+      <tr th:each="p : ${patients}">
+        <td th:text="${p.id}"></td><td th:text="${p.fullName}"></td><td th:text="${p.dateOfBirth}"></td>
+        <td th:text="${p.gender}"></td><td th:text="${p.phone}"></td><td th:text="${p.address}"></td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" th:href="@{/patients/edit/{id}(id=${p.id})}">Edit</a>
+          <form class="d-inline" th:action="@{/patients/delete/{id}(id=${p.id})}" method="post" onsubmit="return confirm('Delete this patient?')">
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
