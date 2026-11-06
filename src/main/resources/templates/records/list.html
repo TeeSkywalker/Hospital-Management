@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Medical Records')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Medical Records</h2>
+<a class="btn btn-primary" sec:authorize="hasAnyRole('ADMIN','DOCTOR')" href="/records/new">+ New Record</a>
+</div><table class="table table-striped"><thead><tr>
+<th>Date</th>
+<th>Patient</th>
+<th>Doctor</th>
+<th>Diagnosis</th>
+<th></th></tr></thead><tbody><tr th:each="x : ${records}">
+<td th:text="${#temporals.format(x.visitDate, 'dd MMM yyyy HH:mm')}"></td><td th:text="${x.patient.fullName}"></td><td th:text="${x.doctor.fullName}"></td><td th:text="${x.diagnosis}"></td><td><a class="btn btn-sm btn-outline-primary" th:href="@{/records/{id}(id=${x.id})}">Open</a></td>
+</tr></tbody></table>
+</div></body></html>

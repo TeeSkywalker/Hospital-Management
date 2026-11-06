@@ -1,9 +1,12 @@
 package com.hospital.repository;
 
-import com.hospital.model.Patient;
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
+import com.hospital.model.*;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
+import java.time.*;
+import java.util.*;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    List<Patient> findByFullNameContainingIgnoreCase(String name);
+    Page<Patient> findByFullNameContainingIgnoreCase(String name, Pageable pageable);
 }

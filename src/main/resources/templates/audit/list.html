@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Audit Log (latest 200 changes)')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Audit Log (latest 200 changes)</h2>
+</div><table class="table table-striped"><thead><tr>
+<th>Time</th>
+<th>User</th>
+<th>Action</th>
+<th></th></tr></thead><tbody><tr th:each="x : ${logs}">
+<td th:text="${#temporals.format(x.timestamp, 'dd MMM yyyy HH:mm')}"></td><td th:text="${x.username}"></td><td th:text="${x.action}"></td>
+</tr></tbody></table>
+</div></body></html>

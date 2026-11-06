@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Departments')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2 class="mb-3">Departments</h2>
+<form class="input-group mb-1" th:action="@{/departments/save}" th:object="${department}" method="post">
+  <input class="form-control" th:field="*{name}" placeholder="New department name">
+  <button class="btn btn-primary">Add</button>
+</form>
+<div class="text-danger small mb-3" th:errors="${department.name}"></div>
+<table class="table table-striped"><thead><tr><th>Name</th><th></th></tr></thead><tbody>
+  <tr th:each="x : ${departments}"><td th:text="${x.name}"></td>
+    <td class="text-end"><form class="d-inline" th:action="@{/departments/delete/{id}(id=${x.id})}" method="post" onsubmit='return confirm("Delete this department?")'><button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr>
+</tbody></table>
+</div></body></html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Record')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between"><h2>Medical record</h2><a sec:authorize="hasAnyRole('ADMIN','DOCTOR')" class="btn btn-outline-primary btn-sm align-self-start" th:href="@{/records/edit/{id}(id=${record.id})}">Edit</a></div>
+<p><strong th:text="${record.patient.fullName}"></strong> seen by <strong th:text="${record.doctor.fullName}"></strong> on <span th:text="${#temporals.format(record.visitDate, 'dd MMM yyyy HH:mm')}"></span></p>
+<div class="card card-body mb-3"><strong>Diagnosis:</strong> <span th:text="${record.diagnosis}"></span><hr><strong>Notes</strong><div th:text="${record.notes}"></div></div>
+
+<h5>Prescriptions</h5>
+<table class="table table-sm"><thead><tr><th>Medicine</th><th>Dosage</th><th>Quantity</th><th>Status</th><th></th></tr></thead><tbody>
+  <tr th:each="p : ${prescriptions}"><td th:text="${p.medicine.name}"></td><td th:text="${p.dosage}"></td><td th:text="${p.quantity}"></td>
+    <td th:text="${p.dispensed} ? 'Dispensed' : 'Pending'"></td>
+    <td><form sec:authorize="hasAnyRole('ADMIN','DOCTOR')" th:if="${!p.dispensed}" th:action="@{/records/{id}/prescription/delete/{pid}(id=${record.id},pid=${p.id})}" method="post"><button class="btn btn-sm btn-outline-danger">Remove</button></form></td></tr>
+</tbody></table>
+
+<form sec:authorize="hasAnyRole('ADMIN','DOCTOR')" class="row g-2 mb-4" th:action="@{/records/{id}/prescribe(id=${record.id})}" method="post">
+  <div class="col-md-4"><select class="form-select" name="medicineId"><option th:each="m : ${medicines}" th:value="${m.id}" th:text="${m.name + ' (stock ' + m.stock + ')'}"></option></select></div>
+  <div class="col-md-4"><input class="form-control" name="dosage" placeholder="Dosage, e.g. 1 tablet twice daily" required></div>
+  <div class="col-md-2"><input class="form-control" type="number" min="1" name="quantity" value="1" required></div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Prescribe</button></div>
+</form>
+<a th:href="@{/patients/{id}(id=${record.patient.id})}">&larr; Patient page</a>
+</div></body></html>

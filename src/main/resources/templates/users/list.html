@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Users')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Users</h2>
+<a class="btn btn-primary" href="/users/new">+ Add User</a>
+</div><table class="table table-striped"><thead><tr>
+<th>Username</th>
+<th>Full name</th>
+<th>Role</th>
+<th>Linked doctor</th>
+<th>Linked patient</th>
+<th></th></tr></thead><tbody><tr th:each="x : ${users}">
+<td th:text="${x.username}"></td><td th:text="${x.fullName}"></td><td th:text="${x.role}"></td><td th:text="${x.doctor?.fullName}"></td><td th:text="${x.patient?.fullName}"></td><td class="text-nowrap"><form class="d-inline" th:action="@{/users/password/{id}(id=${x.id})}" method="post"><input name="newPassword" type="password" minlength="6" placeholder="New password" required class="form-control form-control-sm d-inline w-auto"> <button class="btn btn-sm btn-outline-primary">Reset</button></form>
+<form class="d-inline" th:action="@{/users/delete/{id}(id=${x.id})}" method="post" onsubmit='return confirm("Delete this user?")'><button class="btn btn-sm btn-outline-danger">Delete</button></form></td>
+</tr></tbody></table>
+</div></body></html>

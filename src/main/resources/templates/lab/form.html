@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Request Lab Test')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2>Request Lab Test</h2><form th:action="@{/lab/request}" th:object="${labTest}" method="post"><input type="hidden" th:field="*{id}">
+<div class="mb-3"><label class="form-label">Patient</label><select class="form-select" th:field="*{patient.id}"><option th:each="o : ${patients}" th:value="${o.id}" th:text="${o.fullName}"></option></select><div class="text-danger small" th:errors="*{patient}"></div></div>
+<div class="mb-3"><label class="form-label">Doctor</label><select class="form-select" th:field="*{doctor.id}"><option th:each="o : ${doctors}" th:value="${o.id}" th:text="${o.fullName}"></option></select><div class="text-danger small" th:errors="*{doctor}"></div></div>
+<div class="mb-3"><label class="form-label">Test name</label><input type="text"  class="form-control" th:field="*{testName}"><div class="text-danger small" th:errors="*{testName}"></div></div>
+<div class="mb-3"><label class="form-label">Price</label><input type="number" step="0.01" class="form-control" th:field="*{price}"><div class="text-danger small" th:errors="*{price}"></div></div>
+<button class="btn btn-primary">Save</button> <a class="btn btn-secondary" href="/lab">Cancel</a></form>
+</div></body></html>

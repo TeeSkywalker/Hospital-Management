@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Billing')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2 class="mb-3">Billing</h2>
+<form class="row g-2 mb-4" th:action="@{/billing/create}" method="post">
+  <div class="col-md-6"><select class="form-select" name="patientId"><option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.fullName}"></option></select></div>
+  <div class="col-md-3"><button class="btn btn-primary">Create new bill</button></div>
+</form>
+<table class="table table-striped"><thead><tr><th>Bill</th><th>Patient</th><th>Date</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody>
+  <tr th:each="b : ${bills}"><td th:text="'#' + ${b.id}"></td><td th:text="${b.patient.fullName}"></td>
+    <td th:text="${#temporals.format(b.createdAt, 'dd MMM yyyy HH:mm')}"></td><td th:text="${b.total}"></td>
+    <td><span class="badge" th:classappend="${b.status == 'PAID'} ? 'bg-success' : 'bg-warning text-dark'" th:text="${b.status}"></span></td>
+    <td class="text-end text-nowrap"><a class="btn btn-sm btn-outline-primary" th:href="@{/billing/{id}(id=${b.id})}">Open</a>
+      <form class="d-inline" th:action="@{/billing/delete/{id}(id=${b.id})}" method="post" onsubmit='return confirm("Delete this bill?")'><button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr>
+</tbody></table>
+</div></body></html>

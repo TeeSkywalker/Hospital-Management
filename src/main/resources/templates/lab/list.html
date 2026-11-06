@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Laboratory')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Laboratory</h2>
+<a class="btn btn-primary" sec:authorize="hasAnyRole('ADMIN','DOCTOR')" href="/lab/new">+ Request Test</a>
+</div><table class="table table-striped"><thead><tr>
+<th>Requested</th>
+<th>Patient</th>
+<th>Doctor</th>
+<th>Test</th>
+<th>Price</th>
+<th>Status</th>
+<th>Result</th>
+<th></th></tr></thead><tbody><tr th:each="x : ${tests}">
+<td th:text="${#temporals.format(x.requestedAt, 'dd MMM yyyy HH:mm')}"></td><td th:text="${x.patient.fullName}"></td><td th:text="${x.doctor.fullName}"></td><td th:text="${x.testName}"></td><td th:text="${x.price}"></td><td th:text="${x.status}"></td><td th:text="${x.result}"></td><td><a sec:authorize="hasAnyRole('ADMIN','LAB_TECH')" class="btn btn-sm btn-primary" th:href="@{/lab/result/{id}(id=${x.id})}" th:text="${x.status == 'REQUESTED'} ? 'Enter result' : 'Edit result'"></a></td>
+</tr></tbody></table>
+</div></body></html>

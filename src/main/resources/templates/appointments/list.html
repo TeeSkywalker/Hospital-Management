@@ -1,29 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments :: head('Appointments')}"></head>
 <body>
-<nav th:replace="~{fragments :: nav}"></nav>
-<div class="container">
-  <div class="d-flex justify-content-between mb-3">
-    <h2>Appointments</h2>
-    <a class="btn btn-primary" th:href="@{/appointments/new}">+ Book Appointment</a>
-  </div>
-  <table class="table table-striped">
-    <thead><tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date &amp; time</th><th>Reason</th><th>Status</th><th></th></tr></thead>
-    <tbody>
-      <tr th:each="a : ${appointments}">
-        <td th:text="${a.id}"></td><td th:text="${a.patient.fullName}"></td><td th:text="${a.doctor.fullName}"></td>
-        <td th:text="${#temporals.format(a.appointmentDate, 'dd MMM yyyy HH:mm')}"></td>
-        <td th:text="${a.reason}"></td><td th:text="${a.status}"></td>
-        <td class="text-end">
-          <a class="btn btn-sm btn-outline-primary" th:href="@{/appointments/edit/{id}(id=${a.id})}">Edit</a>
-          <form class="d-inline" th:action="@{/appointments/delete/{id}(id=${a.id})}" method="post" onsubmit="return confirm('Delete this appointment?')">
-            <button class="btn btn-sm btn-outline-danger">Delete</button>
-          </form>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-</body>
-</html>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Appointments</h2><a class="btn btn-primary" th:href="@{/appointments/new}">+ Book Appointment</a></div>
+<form class="row g-2 mb-3" th:action="@{/appointments}" method="get">
+  <div class="col-md-4"><select class="form-select" name="doctorId" sec:authorize="!hasRole('DOCTOR')">
+    <option value="">All doctors</option>
+    <option th:each="d : ${doctors}" th:value="${d.id}" th:text="${d.fullName}" th:selected="${doctorId != null and doctorId == d.id}"></option>
+  </select></div>
+  <div class="col-md-3"><input type="date" class="form-control" name="date" th:value="${date}"></div>
+  <div class="col-md-3"><select class="form-select" name="status">
+    <option value="">Any status</option>
+    <option th:each="s : ${T(java.util.List).of('SCHEDULED','COMPLETED','CANCELLED')}" th:value="${s}" th:text="${s}" th:selected="${status == s}"></option>
+  </select></div>
+  <div class="col-md-2"><button class="btn btn-outline-secondary w-100">Filter</button></div>
+</form>
+<p class="text-muted small">Tip: choose a doctor and a date to see that doctor's schedule for the day.</p>
+<div class="table-responsive"><table class="table table-striped">
+  <thead><tr><th>Date and time</th><th>Patient</th><th>Doctor</th><th>Reason</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    <tr th:each="x : ${page.content}">
+      <td th:text="${#temporals.format(x.appointmentDate, 'dd MMM yyyy HH:mm')}"></td>
+      <td th:text="${x.patient.fullName}"></td><td th:text="${x.doctor.fullName}"></td><td th:text="${x.reason}"></td><td th:text="${x.status}"></td>
+      <td class="text-end text-nowrap">
+        <a class="btn btn-sm btn-outline-primary" th:href="@{/appointments/edit/{id}(id=${x.id})}">Edit</a>
+        <form class="d-inline" th:action="@{/appointments/delete/{id}(id=${x.id})}" method="post" onsubmit='return confirm("Delete this appointment?")'><button class="btn btn-sm btn-outline-danger">Delete</button></form>
+      </td>
+    </tr>
+  </tbody>
+</table></div>
+<div th:replace="~{fragments :: pager(${page}, '/appointments')}"></div>
+</div></body></html>
