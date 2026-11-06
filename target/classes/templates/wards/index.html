@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Wards')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2 class="mb-3">Wards, beds and admissions</h2>
+<div class="row g-4">
+  <div class="col-lg-6">
+    <h5>Admit a patient</h5>
+    <form class="card card-body mb-4" th:action="@{/wards/admit}" method="post">
+      <div class="mb-2"><select class="form-select" name="patientId"><option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.fullName}"></option></select></div>
+      <div class="mb-2"><select class="form-select" name="bedId"><option th:each="b : ${freeBeds}" th:value="${b.id}" th:text="${b.ward + ' - ' + b.bedNumber}"></option></select></div>
+      <div class="mb-2"><input class="form-control" name="reason" placeholder="Reason for admission" required></div>
+      <button class="btn btn-primary">Admit</button>
+    </form>
+    <h5>Add a bed</h5>
+    <form class="row g-2 mb-4" th:action="@{/wards/beds/save}" method="post">
+      <div class="col"><input class="form-control" name="ward" placeholder="Ward name" required></div>
+      <div class="col"><input class="form-control" name="bedNumber" placeholder="Bed number" required></div>
+      <div class="col-auto"><button class="btn btn-outline-primary">Add</button></div>
+    </form>
+    <h5>Beds</h5>
+    <table class="table table-sm"><thead><tr><th>Ward</th><th>Bed</th><th>Status</th><th></th></tr></thead><tbody>
+      <tr th:each="b : ${beds}"><td th:text="${b.ward}"></td><td th:text="${b.bedNumber}"></td>
+        <td><span class="badge" th:classappend="${b.occupied} ? 'bg-danger' : 'bg-success'" th:text="${b.occupied} ? 'Occupied' : 'Free'"></span></td>
+        <td><form th:if="${!b.occupied}" th:action="@{/wards/beds/delete/{id}(id=${b.id})}" method="post" onsubmit='return confirm("Delete this bed?")'><button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr>
+    </tbody></table>
+  </div>
+  <div class="col-lg-6">
+    <h5>Admissions</h5>
+    <table class="table table-sm"><thead><tr><th>Patient</th><th>Bed</th><th>Admitted</th><th>Discharged</th></tr></thead><tbody>
+      <tr th:each="a : ${admissions}"><td th:text="${a.patient.fullName}"></td><td th:text="${a.bed.ward + ' ' + a.bed.bedNumber}"></td>
+        <td th:text="${#temporals.format(a.admittedAt, 'dd MMM yyyy HH:mm')}"></td>
+        <td><span th:if="${a.dischargedAt != null}" th:text="${#temporals.format(a.dischargedAt, 'dd MMM yyyy HH:mm')}"></span>
+          <form th:if="${a.dischargedAt == null}" th:action="@{/wards/discharge/{id}(id=${a.id})}" method="post"><button class="btn btn-sm btn-warning">Discharge</button></form></td></tr>
+    </tbody></table>
+  </div>
+</div>
+</div></body></html>

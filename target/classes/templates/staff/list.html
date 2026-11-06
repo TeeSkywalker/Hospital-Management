@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Staff')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Staff</h2>
+<a class="btn btn-primary" href="/staff/new">+ Add Staff</a>
+</div><table class="table table-striped"><thead><tr>
+<th>Name</th>
+<th>Job title</th>
+<th>Department</th>
+<th>Shift</th>
+<th>Phone</th>
+<th></th></tr></thead><tbody><tr th:each="x : ${staffList}">
+<td th:text="${x.fullName}"></td><td th:text="${x.jobTitle}"></td><td th:text="${x.department?.name}"></td><td th:text="${x.shift}"></td><td th:text="${x.phone}"></td>
+<td class="text-end text-nowrap" ><a class="btn btn-sm btn-outline-primary" th:href="@{/staff/edit/{id}(id=${x.id})}">Edit</a>
+<form class="d-inline" th:action="@{/staff/delete/{id}(id=${x.id})}" method="post" onsubmit='return confirm("Delete this record?")'><button class="btn btn-sm btn-outline-danger">Delete</button></form></td>
+</tr></tbody></table>
+</div></body></html>

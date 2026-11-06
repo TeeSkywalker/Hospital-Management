@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Book appointment')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2>Book an appointment</h2>
+<form th:action="@{/portal/book}" method="post" style="max-width:600px">
+  <div class="mb-3"><label class="form-label">Doctor</label><select class="form-select" name="doctorId"><option th:each="d : ${doctors}" th:value="${d.id}" th:text="${d.fullName + ' - ' + d.specialization}"></option></select></div>
+  <div class="mb-3"><label class="form-label">Date and time</label><input class="form-control" type="datetime-local" name="when" required></div>
+  <div class="mb-3"><label class="form-label">Reason</label><input class="form-control" name="reason"></div>
+  <button class="btn btn-primary">Book</button> <a class="btn btn-secondary" th:href="@{/portal}">Cancel</a>
+</form>
+</div></body></html>

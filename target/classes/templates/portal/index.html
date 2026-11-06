@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('My Portal')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Welcome, <span th:text="${user.fullName}"></span></h2><a class="btn btn-primary align-self-start" th:href="@{/portal/book}">Book an appointment</a></div>
+<div class="alert alert-warning" th:if="${user.patient == null}">Your account is not linked to a patient record yet. Please contact reception.</div>
+<div th:if="${user.patient != null}">
+<h5>My appointments</h5>
+<table class="table table-sm"><thead><tr><th>Date</th><th>Doctor</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>
+  <tr th:each="x : ${appointments}"><td th:text="${#temporals.format(x.appointmentDate, 'dd MMM yyyy HH:mm')}"></td><td th:text="${x.doctor.fullName}"></td><td th:text="${x.reason}"></td><td th:text="${x.status}"></td>
+    <td><form th:if="${x.status == 'SCHEDULED'}" th:action="@{/portal/appointments/cancel/{id}(id=${x.id})}" method="post" onsubmit='return confirm("Cancel this appointment?")'><button class="btn btn-sm btn-outline-danger">Cancel</button></form></td></tr>
+</tbody></table>
+<h5>My bills</h5>
+<table class="table table-sm"><thead><tr><th>Bill</th><th>Date</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody>
+  <tr th:each="x : ${bills}"><td th:text="'#' + ${x.id}"></td><td th:text="${#temporals.format(x.createdAt, 'dd MMM yyyy')}"></td><td th:text="${x.total}"></td><td th:text="${x.status}"></td>
+    <td><a th:href="@{/portal/bills/{id}/pdf(id=${x.id})}" target="_blank">PDF</a></td></tr>
+</tbody></table>
+<h5>My prescriptions</h5>
+<table class="table table-sm"><thead><tr><th>Medicine</th><th>Dosage</th><th>Quantity</th><th>Status</th></tr></thead><tbody>
+  <tr th:each="x : ${prescriptions}"><td th:text="${x.medicine.name}"></td><td th:text="${x.dosage}"></td><td th:text="${x.quantity}"></td><td th:text="${x.dispensed} ? 'Dispensed' : 'Pending'"></td></tr>
+</tbody></table>
+<h5>My visits</h5>
+<table class="table table-sm"><thead><tr><th>Date</th><th>Doctor</th><th>Diagnosis</th></tr></thead><tbody>
+  <tr th:each="x : ${records}"><td th:text="${#temporals.format(x.visitDate, 'dd MMM yyyy')}"></td><td th:text="${x.doctor.fullName}"></td><td th:text="${x.diagnosis}"></td></tr>
+</tbody></table>
+<h5>My lab results</h5>
+<table class="table table-sm"><thead><tr><th>Test</th><th>Status</th><th>Result</th></tr></thead><tbody>
+  <tr th:each="x : ${labs}"><td th:text="${x.testName}"></td><td th:text="${x.status}"></td><td th:text="${x.result}"></td></tr>
+</tbody></table>
+</div>
+</div></body></html>

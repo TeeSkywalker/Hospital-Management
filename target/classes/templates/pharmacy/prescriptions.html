@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Prescriptions to Dispense')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Prescriptions to Dispense</h2>
+</div><table class="table table-striped"><thead><tr>
+<th>Patient</th>
+<th>Medicine</th>
+<th>Dosage</th>
+<th>Qty</th>
+<th>In stock</th>
+<th></th></tr></thead><tbody><tr th:each="x : ${prescriptions}">
+<td th:text="${x.record.patient.fullName}"></td><td th:text="${x.medicine.name}"></td><td th:text="${x.dosage}"></td><td th:text="${x.quantity}"></td><td th:text="${x.medicine.stock}"></td><td><form th:action="@{/pharmacy/dispense/{id}(id=${x.id})}" method="post"><button class="btn btn-sm btn-success">Dispense</button></form></td>
+</tr></tbody></table>
+</div></body></html>

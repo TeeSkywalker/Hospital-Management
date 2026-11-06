@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('New user')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2>New user</h2>
+<form th:action="@{/users/save}" method="post" style="max-width:600px">
+  <div class="mb-3"><label class="form-label">Username</label><input class="form-control" name="username" required></div>
+  <div class="mb-3"><label class="form-label">Full name</label><input class="form-control" name="fullName" required></div>
+  <div class="mb-3"><label class="form-label">Password (min 6 characters)</label><input class="form-control" type="password" name="password" minlength="6" required></div>
+  <div class="mb-3"><label class="form-label">Role</label><select class="form-select" name="role"><option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option></select></div>
+  <div class="mb-3"><label class="form-label">Doctor record (only for DOCTOR users)</label><select class="form-select" name="doctorId"><option value="">-- none --</option><option th:each="d : ${doctors}" th:value="${d.id}" th:text="${d.fullName}"></option></select></div>
+  <div class="mb-3"><label class="form-label">Patient record (only for PATIENT users)</label><select class="form-select" name="patientId"><option value="">-- none --</option><option th:each="p : ${patients}" th:value="${p.id}" th:text="${p.fullName}"></option></select></div>
+  <button class="btn btn-primary">Create</button> <a class="btn btn-secondary" th:href="@{/users}">Cancel</a>
+</form>
+</div></body></html>

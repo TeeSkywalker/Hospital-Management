@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments :: head('Patient')}"></head>
 <body>
-<nav th:replace="~{fragments :: nav}"></nav>
-<div class="container" style="max-width:700px">
-  <h2 th:text="${patient.id == null} ? 'Add Patient' : 'Edit Patient'"></h2>
-  <form th:action="@{/patients/save}" th:object="${patient}" method="post">
-    <input type="hidden" th:field="*{id}">
-    <div class="mb-3"><label class="form-label">Full name</label><input class="form-control" th:field="*{fullName}" required></div>
-    <div class="mb-3"><label class="form-label">Date of birth</label><input type="date" class="form-control" th:field="*{dateOfBirth}"></div>
-    <div class="mb-3"><label class="form-label">Gender</label>
-      <select class="form-select" th:field="*{gender}"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
-    <div class="mb-3"><label class="form-label">Phone</label><input class="form-control" th:field="*{phone}"></div>
-    <div class="mb-3"><label class="form-label">Address</label><input class="form-control" th:field="*{address}"></div>
-    <div class="mb-3"><label class="form-label">Medical history</label><textarea class="form-control" rows="4" th:field="*{medicalHistory}"></textarea></div>
-    <button class="btn btn-primary">Save</button>
-    <a class="btn btn-secondary" th:href="@{/patients}">Cancel</a>
-  </form>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2>Patient</h2><form th:action="@{/patients/save}" th:object="${patient}" method="post"><input type="hidden" th:field="*{id}">
+<div class="mb-3"><label class="form-label">Full name</label><input type="text"  class="form-control" th:field="*{fullName}"><div class="text-danger small" th:errors="*{fullName}"></div></div>
+<div class="mb-3"><label class="form-label">Date of birth</label><input type="date"  class="form-control" th:field="*{dateOfBirth}"><div class="text-danger small" th:errors="*{dateOfBirth}"></div></div>
+<div class="mb-3"><label class="form-label">Gender</label><select class="form-select" th:field="*{gender}"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+<div class="mb-3"><label class="form-label">Phone</label><input type="text"  class="form-control" th:field="*{phone}"><div class="text-danger small" th:errors="*{phone}"></div></div>
+<div class="mb-3"><label class="form-label">Email</label><input type="email"  class="form-control" th:field="*{email}"><div class="text-danger small" th:errors="*{email}"></div></div>
+<div class="mb-3"><label class="form-label">Address</label><input type="text"  class="form-control" th:field="*{address}"><div class="text-danger small" th:errors="*{address}"></div></div>
+<div sec:authorize="hasAnyRole('ADMIN','DOCTOR','NURSE')">
+<div class="mb-3"><label class="form-label">Medical history</label><textarea rows="4" class="form-control" th:field="*{medicalHistory}"></textarea></div>
 </div>
-</body>
-</html>
+<button class="btn btn-primary">Save</button> <a class="btn btn-secondary" href="/patients">Cancel</a></form>
+</div></body></html>

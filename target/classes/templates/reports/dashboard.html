@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Reports')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<div class="d-flex justify-content-between mb-3"><h2>Reports</h2>
+  <div class="text-nowrap">
+    <a class="btn btn-sm btn-outline-secondary" th:href="@{/reports/export/bills.csv}">Bills (Excel/CSV)</a>
+    <a class="btn btn-sm btn-outline-secondary" th:href="@{/reports/export/appointments.csv}">Appointments (Excel/CSV)</a>
+    <a class="btn btn-sm btn-outline-secondary" th:href="@{/reports/summary.pdf}" target="_blank">Summary (PDF)</a>
+    <form class="d-inline" th:action="@{/reports/reminders}" method="post"><button class="btn btn-sm btn-outline-primary">Send tomorrow's reminders</button></form>
+  </div></div>
+<div class="row g-3 mb-3">
+  <div class="col-md-6"><div class="card text-center p-3"><h3 th:text="${paidTotal}">0</h3><div>Revenue (paid bills)</div></div></div>
+  <div class="col-md-6"><div class="card text-center p-3"><h3 th:text="${unpaidTotal}">0</h3><div>Outstanding (unpaid bills)</div></div></div>
+</div>
+<div class="row g-3">
+  <div class="col-md-6"><div class="card p-3"><h6>Appointments, last 7 days</h6><canvas id="c1"></canvas></div></div>
+  <div class="col-md-6"><div class="card p-3"><h6>Revenue, last 7 days</h6><canvas id="c2"></canvas></div></div>
+  <div class="col-md-6"><div class="card p-3"><h6>Appointments by status</h6><canvas id="c3"></canvas></div></div>
+  <div class="col-md-6"><div class="card p-3"><h6>Appointments by department</h6><canvas id="c4"></canvas></div></div>
+</div>
+<h5 class="mt-4">Medicines at or below reorder level</h5>
+<table class="table table-sm"><thead><tr><th>Medicine</th><th>Stock</th><th>Reorder level</th></tr></thead><tbody>
+  <tr th:each="m : ${lowStock}"><td th:text="${m.name}"></td><td th:text="${m.stock}"></td><td th:text="${m.reorderLevel}"></td></tr>
+</tbody></table>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script th:inline="javascript">
+  const days = /*[[${days}]]*/ [];
+  const opts = {scales: {y: {beginAtZero: true, ticks: {precision: 0}}}, plugins: {legend: {display: false}}};
+  new Chart(document.getElementById('c1'), {type: 'bar', data: {labels: days, datasets: [{data: /*[[${perDay}]]*/ [], backgroundColor: '#0d6efd'}]}, options: opts});
+  new Chart(document.getElementById('c2'), {type: 'line', data: {labels: days, datasets: [{data: /*[[${revenue}]]*/ [], borderColor: '#198754', tension: 0.3}]}, options: opts});
+  new Chart(document.getElementById('c3'), {type: 'doughnut', data: {labels: /*[[${statusLabels}]]*/ [], datasets: [{data: /*[[${statusValues}]]*/ []}]}});
+  new Chart(document.getElementById('c4'), {type: 'bar', data: {labels: /*[[${deptLabels}]]*/ [], datasets: [{data: /*[[${deptValues}]]*/ [], backgroundColor: '#6f42c1'}]}, options: opts});
+</script>
+</div></body></html>

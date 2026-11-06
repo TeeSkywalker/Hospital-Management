@@ -1,19 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments :: head('Doctor')}"></head>
 <body>
-<nav th:replace="~{fragments :: nav}"></nav>
-<div class="container" style="max-width:700px">
-  <h2 th:text="${doctor.id == null} ? 'Add Doctor' : 'Edit Doctor'"></h2>
-  <form th:action="@{/doctors/save}" th:object="${doctor}" method="post">
-    <input type="hidden" th:field="*{id}">
-    <div class="mb-3"><label class="form-label">Full name</label><input class="form-control" th:field="*{fullName}" required></div>
-    <div class="mb-3"><label class="form-label">Specialization</label><input class="form-control" th:field="*{specialization}"></div>
-    <div class="mb-3"><label class="form-label">Phone</label><input class="form-control" th:field="*{phone}"></div>
-    <div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" th:field="*{email}"></div>
-    <button class="btn btn-primary">Save</button>
-    <a class="btn btn-secondary" th:href="@{/doctors}">Cancel</a>
-  </form>
-</div>
-</body>
-</html>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2>Doctor</h2><form th:action="@{/doctors/save}" th:object="${doctor}" method="post"><input type="hidden" th:field="*{id}">
+<div class="mb-3"><label class="form-label">Full name</label><input type="text"  class="form-control" th:field="*{fullName}"><div class="text-danger small" th:errors="*{fullName}"></div></div>
+<div class="mb-3"><label class="form-label">Specialization</label><input type="text"  class="form-control" th:field="*{specialization}"><div class="text-danger small" th:errors="*{specialization}"></div></div>
+<div class="mb-3"><label class="form-label">Department</label><select class="form-select" th:field="*{department.id}"><option th:each="o : ${departments}" th:value="${o.id}" th:text="${o.name}"></option></select><div class="text-danger small" th:errors="*{department}"></div></div>
+<div class="mb-3"><label class="form-label">Phone</label><input type="text"  class="form-control" th:field="*{phone}"><div class="text-danger small" th:errors="*{phone}"></div></div>
+<div class="mb-3"><label class="form-label">Email</label><input type="email"  class="form-control" th:field="*{email}"><div class="text-danger small" th:errors="*{email}"></div></div>
+<button class="btn btn-primary">Save</button> <a class="btn btn-secondary" href="/doctors">Cancel</a></form>
+</div></body></html>

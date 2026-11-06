@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments :: head('Dashboard')}"></head>
 <body>
-<nav th:replace="~{fragments :: nav}"></nav>
-<div class="container">
-  <h2 class="mb-4">Dashboard</h2>
-  <div class="row g-3">
-    <div class="col-md-4"><a class="text-decoration-none" th:href="@{/patients}"><div class="card text-center p-4"><h1 th:text="${patientCount}">0</h1><div>Patients</div></div></a></div>
-    <div class="col-md-4"><a class="text-decoration-none" th:href="@{/doctors}"><div class="card text-center p-4"><h1 th:text="${doctorCount}">0</h1><div>Doctors</div></div></a></div>
-    <div class="col-md-4"><a class="text-decoration-none" th:href="@{/appointments}"><div class="card text-center p-4"><h1 th:text="${appointmentCount}">0</h1><div>Appointments</div></div></a></div>
-  </div>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-3">
+  <div class="col-md-3"><div class="card text-center p-4"><h1 th:text="${patientCount}">0</h1><div>Patients</div></div></div>
+  <div class="col-md-3"><div class="card text-center p-4"><h1 th:text="${doctorCount}">0</h1><div>Doctors</div></div></div>
+  <div class="col-md-3"><div class="card text-center p-4"><h1 th:text="${todayCount}">0</h1><div>Appointments today</div></div></div>
+  <div class="col-md-3"><div class="card text-center p-4" th:classappend="${lowStock > 0} ? 'border-danger'"><h1 th:text="${lowStock}">0</h1><div>Medicines low on stock</div></div></div>
 </div>
-</body>
-</html>
+<p class="text-muted mt-4">Use the menu at the top to open a module.</p>
+</div></body></html>

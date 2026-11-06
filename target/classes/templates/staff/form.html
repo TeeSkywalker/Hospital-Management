@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Staff member')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<div class="container pb-5">
+<h2>Staff member</h2><form th:action="@{/staff/save}" th:object="${staff}" method="post"><input type="hidden" th:field="*{id}">
+<div class="mb-3"><label class="form-label">Full name</label><input type="text"  class="form-control" th:field="*{fullName}"><div class="text-danger small" th:errors="*{fullName}"></div></div>
+<div class="mb-3"><label class="form-label">Job title</label><input type="text"  class="form-control" th:field="*{jobTitle}"><div class="text-danger small" th:errors="*{jobTitle}"></div></div>
+<div class="mb-3"><label class="form-label">Department</label><select class="form-select" th:field="*{department.id}"><option th:each="o : ${departments}" th:value="${o.id}" th:text="${o.name}"></option></select><div class="text-danger small" th:errors="*{department}"></div></div>
+<div class="mb-3"><label class="form-label">Shift</label><select class="form-select" th:field="*{shift}"><option value="Morning">Morning</option><option value="Afternoon">Afternoon</option><option value="Night">Night</option></select></div>
+<div class="mb-3"><label class="form-label">Phone</label><input type="text"  class="form-control" th:field="*{phone}"><div class="text-danger small" th:errors="*{phone}"></div></div>
+<button class="btn btn-primary">Save</button> <a class="btn btn-secondary" href="/staff">Cancel</a></form>
+</div></body></html>
