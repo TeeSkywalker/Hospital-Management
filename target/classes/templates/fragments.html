@@ -9,7 +9,7 @@
 </head>
 <body>
 <div th:fragment="nav">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container">
       <a class="navbar-brand" th:href="@{/}">Hospital MS</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
@@ -40,19 +40,19 @@
         <form th:action="@{/logout}" method="post"><button class="btn btn-outline-light btn-sm">Logout</button></form>
       </div>
     </div>
-  </nav>
+  </div>
   <div class="container" th:if="${error != null or msg != null}">
     <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
     <div class="alert alert-success" th:if="${msg != null}" th:text="${msg}"></div>
   </div>
 </div>
 
-<nav th:fragment="pager(p, url)" th:if="${p.totalPages > 1}">
+<div th:fragment="pager(p, url)" th:if="${p.totalPages > 1}">
   <ul class="pagination">
     <li class="page-item" th:classappend="${p.first} ? 'disabled'"><a class="page-link" th:href="@{${url}(page=${p.number - 1},q=${param.q},doctorId=${param.doctorId},date=${param.date},status=${param.status})}">Previous</a></li>
     <li class="page-item disabled"><span class="page-link" th:text="${p.number + 1} + ' of ' + ${p.totalPages}"></span></li>
     <li class="page-item" th:classappend="${p.last} ? 'disabled'"><a class="page-link" th:href="@{${url}(page=${p.number + 1},q=${param.q},doctorId=${param.doctorId},date=${param.date},status=${param.status})}">Next</a></li>
   </ul>
-</nav>
+</div>
 </body>
 </html>
